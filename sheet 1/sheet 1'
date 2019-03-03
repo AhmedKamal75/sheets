@@ -1,0 +1,100 @@
+public class MySpecialArrayUtils {
+    //    a.public static void reverse(int[] arr)
+    public static void reverse(int[] arr) {
+        for (int i = 0; i < arr.length / 2; i++) {
+            swap(arr, i, arr.length - i - 1);
+        }
+    }
+
+    //   b.public static int[] sumEvenOdd(int[] arr)
+    public static int[] sumEvenOdd(int[] arr) {
+        int[] sumArray = new int[2];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] % 2 == 0) {
+                sumArray[0] += arr[i];
+            } else {
+                sumArray[1] += arr[i];
+            }
+        }
+        return sumArray;
+    }
+
+    //   c.public static double average(int[] arr)
+    public static double average(int[] arr) {
+        // to avoid the overFlow i am ganna store the sum of integers in a double (8 Bytes)
+
+        if (arr.length == 0 || arr == null) return 0;
+
+        double sum = 0;
+        for (Integer i : arr) {
+            sum += (double) i;
+        }
+        return sum / (double) arr.length;
+    }
+
+    //  d. public static void moveValue(int[] arr, int val)
+    public static void moveValue(int[] arr, int val) {
+        int valCounter = 0;                      // to count how many times did val show in the array
+        int lastEncounteredIndex = 0;            // to save the position val was last seen, that we shouldn't go back
+        boolean quit = false;                    // and start iterating all over again from the start
+        do {
+            quit = true;
+            for (int i = lastEncounteredIndex; i < (arr.length - valCounter); i++) {
+                if (arr[i] == val) {
+                    quit = false;
+                    valCounter++;
+                    lastEncounteredIndex = i;    // updating to new position
+                    for (int j = i; j < (arr.length - 1); j++) {  // shifting all the elements after val one position back
+                        arr[j] = arr[j + 1];
+                    }
+                    arr[arr.length - 1] = val; // updating the last element to val. actually it is needed only once then
+                    break;                     // the shift would take care of the rest
+                }
+            }
+        } while (!quit);
+    }
+
+
+    //  e. public static void transpose(int[][] arr)
+    public static int[][] transpose(int[][] arr) {
+        if (arr.length == 0 || arr == null) return null;
+
+        int[][] tempArray = new int[arr[0].length][arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                tempArray[j][i] = arr[i][j];
+            }
+        }
+        return tempArray;
+    }
+
+
+    public static void swap(int[] arr, int first, int last) {
+        int intTamp = arr[first];
+        arr[first] = arr[last];
+        arr[last] = intTamp;
+    }
+
+
+    //                  question 2
+
+    public static int intFib(int n) {
+        if (n < 1) return 0;
+        if (n == 1) return 1;
+
+        return intFib(n - 1) + intFib(n - 2);
+    }
+
+    // but if i want to integer overflow i would like to use a bigger data container than integer, maybe long or double
+    // but i really want to use BigDecimal class :)
+
+    public static BigDecimal bigIntFib(long n) { // it takes time, but it gives you what you want
+        if (n < 1) return BigDecimal.ZERO;
+        if (n == 1) return BigDecimal.ONE;
+
+        return bigIntFib(n - 1).add(bigIntFib(n - 2));
+    }
+
+
+}
