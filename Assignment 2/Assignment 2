@@ -122,7 +122,8 @@ public class MySpecialLinkedListUtils {
         head = mergeSort(head);
 
         secondHead = mergeSort(secondHead);
-        return merge(head,secondHead);
+        head = merge(head,secondHead);
+        return head;
 
     }
 
