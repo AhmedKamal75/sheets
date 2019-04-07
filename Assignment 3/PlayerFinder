@@ -1,0 +1,71 @@
+ackage eg.edu.alexu.csd.datastructure.iceHockey;
+
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class PlayerFinder implements IPlayersFinder {
+    // dummy fields
+    private Point maxPoint;
+    private Point minPoint;
+    private int area = 0;
+
+
+    @Override
+    public Point[] findPlayers(String[] photo, int team, int threshold) {
+        if (photo == null || photo.length == 0) return new Point[0];
+        LinkedList<Point> playerList = new LinkedList<>();
+        char[][] grid = toCharGrid(photo);
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == ('0' + team)) {
+                    maxPoint = new Point(j, i);
+                    minPoint = new Point(j, i);
+                    area = 0;
+                    findPlayer(grid, team, i, j);
+                    if (area >= threshold) {
+                        playerList.add(new Point(maxPoint.x + minPoint.x + 1, maxPoint.y + minPoint.y + 1));
+                    }
+                }
+            }
+        }
+
+
+        playerList.sort(new PointsComapare());
+
+        Point[] array = new Point[playerList.size()];
+        Iterator<Point> iter = playerList.iterator();
+        int i = 0;
+        while (iter.hasNext()) array[i++] = iter.next();
+        return array;
+    }
+
+    private void findPlayer(char[][] grid, int team, int i, int j) {
+        grid[i][j] = '*';
+        if (maxPoint.x < j) maxPoint.x = j;
+        if (maxPoint.y < i) maxPoint.y = i;
+        if (minPoint.x > j) minPoint.x = j;
+        if (minPoint.y > i) minPoint.y = j;
+        this.area += 4;
+        if ((j <= grid[i].length - 2) && (grid[i][j + 1] == ('0' + team))) { // look right
+            findPlayer(grid,team,i,j + 1);
+        } if ((j >= 1) && (grid[i][j - 1] == ('0' + team))){ // look left
+            findPlayer(grid,team,i,j - 1);
+        } if ((i <= grid.length - 2) && (grid[i + 1][j] == ('0' + team))){  // look down
+            findPlayer(grid,team,i + 1, j);
+        } if ((i >= 1) && (grid[i - 1][j] == ('0' + team))){  // look up
+            findPlayer(grid,team,i - 1,j);
+        }
+    }
+
+
+    private char[][] toCharGrid(String[] photo) {
+        char[][] grid = new char[photo.length][photo[0].length()];
+        for (int i = 0; i < photo.length; i++) {
+            for (int j = 0; j < photo[i].length(); j++) {
+                grid[i][j] = photo[i].charAt(j);
+            }
+        }
+        return grid;
+    }
+}
