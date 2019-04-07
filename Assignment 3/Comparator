@@ -1,0 +1,13 @@
+package eg.edu.alexu.csd.datastructure.iceHockey;
+
+import java.awt.*;
+import java.util.Comparator;
+
+public class PointsComapare implements Comparator<Point> {
+    @Override
+    public int compare(Point point, Point t1) {
+        if (point.x != t1.x) return(point.x - t1.x);
+        return(point.y - t1.y);
+    }
+
+}
