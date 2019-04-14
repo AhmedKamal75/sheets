@@ -1,4 +1,4 @@
-ackage eg.edu.alexu.csd.datastructure.iceHockey;
+package eg.edu.alexu.csd.datastructure.iceHockey;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -13,7 +13,7 @@ public class PlayerFinder implements IPlayersFinder {
 
     @Override
     public Point[] findPlayers(String[] photo, int team, int threshold) {
-        if (photo == null || photo.length == 0) return new Point[0];
+        if (photo == null || photo.length == 0) return null;
         LinkedList<Point> playerList = new LinkedList<>();
         char[][] grid = toCharGrid(photo);
         for (int i = 0; i < grid.length; i++) {
