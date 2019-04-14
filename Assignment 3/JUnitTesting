@@ -50,4 +50,9 @@ class PlayerFinderTest {
         });
     }
 
+    @org.junit.jupiter.api.Test
+    public void findPlayer_test5(){
+        assertArrayEquals(playerFinder.findPlayers(null,5,5),null);
+    }
+
 }
