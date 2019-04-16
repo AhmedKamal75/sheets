@@ -4,6 +4,9 @@ public class DLinkedList implements ILinkedList {
     private DNode head;
     private DNode tail;
     private int size = 0;
+    private int cursorIndex = 0;
+    private DNode cursorNode;
+
 
     public DLinkedList() {
         this(null);
@@ -13,6 +16,7 @@ public class DLinkedList implements ILinkedList {
         head = new DNode(obj,null,null);
         tail = new DNode(null,null,head);
         head.setNext(tail);
+        cursorNode = head;
     }
 
     @Override
@@ -39,6 +43,15 @@ public class DLinkedList implements ILinkedList {
         }
         size++;
     } // done and tested
+
+    public int indexOf(Object obj){
+        DNode currentNode = head;
+        for (int i = 0; i < size ; i++) {
+            if (currentNode.getData().equals(obj)) return i;
+            currentNode = currentNode.getNext();
+        }
+        return -1;
+    }
 
     @Override
     public void add(Object element) throws RuntimeException{
@@ -69,6 +82,8 @@ public class DLinkedList implements ILinkedList {
     private DNode findNode(int index) throws RuntimeException{
         if (index >= size || index < 0){
             throw new RuntimeException("index out of bound, index = " + index + " , size = " + size);
+        } else if (size == 1){
+            return head;
         } else if (index == size - 1) return tail;
         DNode currentNode = head;
         for (int i = 0; i < index ; i++) {
@@ -108,6 +123,10 @@ public class DLinkedList implements ILinkedList {
     @Override
     public void remove(int index) {
         DNode node = findNode(index);
+        remove(node);
+    }  // done and tested
+
+    private void remove(DNode node){
         if (head.equals(node)) {
             if (head.getNext().getData() == null || head.getNext() == tail){
                 head.setData(head.getNext().getData());
@@ -128,7 +147,7 @@ public class DLinkedList implements ILinkedList {
             node.getPrevious().setNext(node.getNext());
         }
         size--;
-    }  // done and tested
+    }
 
     @Override
     public int size() {
@@ -148,6 +167,53 @@ public class DLinkedList implements ILinkedList {
         }
         return list;
     }  // done and tested
+
+    public void setCursor (int index){
+        cursorNode = findNode(index);
+    } // done and tested
+
+    public Object getCurrent(){
+        return this.cursorNode.getData();
+    } // done and tested
+
+    public Object getNext(){
+        if (cursorNode.getNext() != null){
+            cursorNode = cursorNode.getNext();
+            cursorIndex++;
+            return cursorNode.getData();
+        }
+        return null;
+    } // done and tested
+
+    public Object getPrevious(){
+        if (cursorNode.getPrevious() != null){
+            cursorNode = cursorNode.getPrevious();
+            cursorIndex--;
+            return cursorNode.getData();
+        }
+        return null;
+    } // done and tested
+
+    public boolean hasNext(){
+        if (cursorNode.getNext() == null) return false;
+        return cursorNode.getNext().getData() != null;
+    } // done and tested
+
+    public boolean hasPrevious(){
+        if (cursorNode.getPrevious() == null) return false;
+        return cursorNode.getPrevious().getData() != null;
+    } // done and tested
+
+    public int getCursorIndex (){
+        return cursorIndex;
+    } // done and tested
+
+    public void removeCurrent(){
+        if (this.isEmpty()) return;
+        remove(cursorNode);
+        if (this.isEmpty()) return;
+        setCursor(0);
+    } // done and tested
 
     @Override
     public boolean contains(Object o) {
@@ -223,5 +289,5 @@ public class DLinkedList implements ILinkedList {
                     this.getNext().equals(node.getNext())&&
                     this.getPrevious().equals(node.getPrevious());
         }
-    }
+    } // done and tested
 }
