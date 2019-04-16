@@ -67,8 +67,15 @@ public class PolynomialSolver implements IPolynomialSolver{
 
     @Override
     public float evaluatePolynomial(char poly, float value) {
-        return 0;
-    }
+        Polynomial polynomial  = getPolynomial(poly);
+        if (polynomial == null ) return Float.MAX_VALUE;
+        int[][] arr = polynomial.getTerms();
+        float sum = 0;
+        for (int i = 0; i < arr.length ; i++) {
+            sum += ((float) arr[i][0] * ( float) Math.pow((double) value, (double) arr[i][1]));
+        }
+        return sum;
+    } // done and tested
 
     @Override
     public int[][] add(char poly1, char poly2) {
