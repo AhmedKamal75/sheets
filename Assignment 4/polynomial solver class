@@ -1,0 +1,172 @@
+package eg.edu.alexu.csd.datastructure.linkedList;
+
+public class PolynomialSolver implements IPolynomialSolver{
+    private DLinkedList list = new DLinkedList();
+    private Polynomial ans = new Polynomial('R',null);
+
+    @Override
+    public void setPolynomial(char poly, int[][] terms) {
+        boolean found  = false;
+        if (!list.isEmpty()) {
+            list.setCursor(0);
+            if (((Polynomial) list.getCurrent()).getName() == poly) {
+                ((Polynomial) list.getCurrent()).setTerms(terms);
+                found = true;
+            } else {
+                while (list.hasNext()) {
+                    if (((Polynomial) list.getNext()).getName() == poly) {
+                        ((Polynomial) list.getCurrent()).setTerms(terms);
+                        found = true;
+                    }
+                }
+            }
+
+        }
+        if (list.isEmpty() || !found){
+            list.add(new Polynomial(poly,terms));
+        }
+    } // done and tested
+
+    @Override
+    public String print(char poly) {
+        if (list.isEmpty()) return "No Polynomial found";
+        Polynomial polynomial = getPolynomial(poly);
+        if (polynomial == null) return null;
+        return polynomial.toString();
+    }  // done and tested
+
+    private Polynomial getPolynomial(char poly){
+        if (list.isEmpty()) return null;
+        list.setCursor(0);
+        if (((Polynomial) list.getCurrent()).getName() == poly){
+            return (Polynomial) list.getCurrent();
+        }
+        while (list.hasNext()){
+            if (((Polynomial) list.getNext()).getName() == poly){
+                return (Polynomial) list.getCurrent();
+            }
+        }
+        return null;
+    }  // done and tested
+
+    @Override
+    public void clearPolynomial(char poly) {
+        if (list.isEmpty()) return;
+        list.setCursor(0);
+        if (((Polynomial) list.getCurrent()).getName() == poly){
+            list.removeCurrent();
+        } else {
+            while (list.hasNext()) {
+                if (((Polynomial) list.getNext()).getName() == poly) {
+                    list.removeCurrent();
+                    break;
+                }
+            }
+        }
+    } // done and tested
+
+    @Override
+    public float evaluatePolynomial(char poly, float value) {
+        return 0;
+    }
+
+    @Override
+    public int[][] add(char poly1, char poly2) {
+        return new int[0][];
+    }
+
+    @Override
+    public int[][] subtract(char poly1, char poly2) {
+        return new int[0][];
+    }
+
+    @Override
+    public int[][] multiply(char poly1, char poly2) {
+        return new int[0][];
+    }
+
+    @Override
+    public String toString() {
+        if (list.isEmpty()) return "No Polynomials found";
+        StringBuilder s = new StringBuilder("");
+        list.setCursor(0);
+        s.append(list.getCurrent()).append('\n');
+        while (list.hasNext()){
+            s.append(list.getNext()).append('\n');
+
+        }
+        return s.toString();
+    } // done and tested
+
+    public Polynomial getAns() {
+        return ans;
+    }
+
+    private class Polynomial{
+        private final char name;
+        private int[][] terms;
+
+        public Polynomial(char name, int[][] terms) {
+            this.name = name;
+            this.terms = terms;
+        }
+
+        public char getName() {
+            return name;
+        }
+
+        public int[][] getTerms() {
+            return terms;
+        }
+
+        public void setTerms(int[][] terms) {
+            this.terms = terms;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            Polynomial polynomial = (Polynomial) obj;
+            if (this.getTerms().length != polynomial.getTerms().length) return false;
+            for (int i = 0; i < polynomial.getTerms().length ; i++) {
+                if (this.getTerms()[i].length != polynomial.getTerms()[i].length) return false;
+                for (int j = 0; j < polynomial.getTerms()[i].length ; j++) {
+                    if (polynomial.getTerms()[i][j] != this.getTerms()[i][j]) return false;
+                }
+            }
+            return this.getName() == polynomial.getName();
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder s = new StringBuilder(this.name + ": ");
+            for (int i = 0 ; i < this.terms.length ; i++){
+                if (terms[i][0] != 0){  // total
+                    if (terms[i][1] == 0){ // absolute value
+                        if (i == 0){ // first term
+                            s.append(terms[i][0]);
+                        } else { // not first term
+                            if (terms[i][0] < 0) s.append("- ").append(Math.abs(terms[i][0]));
+                            else if (terms[i][0] > 0) s.append("+ ").append(terms[i][0]);
+                        }
+                        continue;
+                    }
+                    if (i == 0){ // first term
+                        if (terms[i][0] != 1) s.append(terms[i][0]);
+                        s.append('X').append('^').append(terms[i][1]);
+                    } else {
+                        if (terms[i][0] > 0){ //+ ve coefficient meddle term
+                            s.append("+ ").append(terms[i][0]).append('X').append('^').append(terms[i][1]);
+                        } else { // -ve coefficient meddle term
+                            s.append("- ").append(Math.abs(terms[i][0])).append('X').append('^').append(terms[i][1]);
+                        }
+                    }
+                    s.append(' ');
+                }
+//                if (terms[i][0] != 1) s.append(terms[i][0]);
+//                s.append('X').append('^').append(terms[i][1]);
+//                if (i != terms.length - 1) s.append(" + ");
+            }
+            return s.toString();
+        } // done and tested
+    }  // done and tested
+}
