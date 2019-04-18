@@ -1,0 +1,210 @@
+package com.company;
+
+import eg.edu.alexu.csd.datastructure.linkedList.PolynomialSolver;
+
+import java.util.Scanner;
+
+
+public class Main {
+
+    private static Scanner scanner = new Scanner(System.in);
+    private static PolynomialSolver solver = new PolynomialSolver();
+
+    public static void main(String[] args) {
+
+//        solver.setPolynomial('A', new int[][]{new int[]{1, 2}, new int[]{-1, 0}});
+//        solver.setPolynomial('B', new int[][]{new int[]{4, 2}, new int[]{-9, 0}});
+//        solver.setPolynomial('C', new int[][]{new int[]{4, 3}, new int[]{-1, 0}});
+//        solver.setPolynomial('X', new int[][]{new int[]{-14, 2}, new int[]{11, 0}});
+//        solver.setPolynomial('N', new int[][]{new int[]{114, -2}, new int[]{-151, 19}});
+//
+
+        operate();
+    }
+
+    private static void operate() {
+        boolean quit = false;
+        System.out.println(menu());
+        do {
+            while (!scanner.hasNextInt()) {
+                System.out.println("Wrong Input, try again");
+                scanner = new Scanner(System.in);
+            }
+            int i = scanner.nextInt();
+            scanner.nextLine();
+            switch (i) {
+                case 0:
+                    quit = true;
+                    break;
+                case 1:
+                    setPolynomial();
+                    break;
+                case 2:
+                    printPolynomial();
+                    break;
+                case 3:
+                    add();
+                    break;
+                case 4:
+                    subtract();
+                    break;
+                case 5:
+                    multiply();
+                    break;
+                case 6:
+                    evaluatePolynomial();
+                    break;
+                case 7:
+                    clearPolynomial();
+                    break;
+                default:
+                    System.out.println("Wrong Input");
+                    continue;
+            }
+            System.out.print("====================================================================\n");
+            System.out.println(menu());
+        } while (!quit);
+        System.out.println("Thanks to using out product");
+    }
+
+    private static String menu() {
+        return "Please choose an action \n" +
+                "----------------------\n" +
+                "0- To quit the program \n" +
+                "1- Set a polynomial variable \n" +
+                "2- Print the value of a polynomial variable \n" +
+                "3- Add two polynomials \n" +
+                "4- Subtract two polynomials\n" +
+                "5- Multiply two polynomials \n" +
+                "6- Evaluate a polynomial at some point \n" +
+                "7- Clear a polynomial variable\n" +
+                " ====================================================================\n";
+    }
+
+    private static void setPolynomial() {
+        Character poly = getPolyInput();
+        if (poly == null) {
+            System.out.println("Wrong input");
+            return;
+        }
+        System.out.print("Insert the polynomial terms in the form:\n" +
+                " (coeff1, exponent1), (coeff2, exponent2), .. \n");
+        String input = scanner.nextLine();
+        boolean quit = false;
+        do {
+            int s = input.indexOf(' ');
+            if (s != -1) input = charRemoveAt(input, s);
+            int l = input.indexOf('(');
+            if (l != -1) input = charRemoveAt(input, l);
+            int r = input.indexOf(')');
+            if (r != -1) input = charRemoveAt(input, r);
+            quit = (s == -1) && (l == -1) && (r == -1);
+        } while (!quit);
+        String[] arr = input.split(",");
+        if (arr.length % 2 == 1) {
+            System.out.println("Wrong input");
+            return;
+        }
+        int[][] terms = new int[arr.length / 2][2];
+
+        try {
+            for (int i = 0; i < arr.length / 2; i++) {
+                terms[i][0] = Integer.parseInt(arr[2 * i]);
+                terms[i][1] = Integer.parseInt(arr[2 * i + 1]);
+            }
+        } catch (NumberFormatException e){
+            System.out.println("Wrong input");
+            return;
+        }
+        solver.setPolynomial(poly, terms);
+    }  // tested and worked
+
+    private static String charRemoveAt(String str, int p) {
+        return str.substring(0, p) + str.substring(p + 1);
+    }
+
+    private static void printPolynomial() {
+        Character poly = getPolyInput();
+        if (poly == null) return;
+        String message = solver.print(poly);
+        if (message == null) {
+            System.out.println("The polynomial " + poly + " isn't found");
+        } else {
+            System.out.println(message);
+        }
+    }  // done and tested
+
+    private static void add(){
+        char[] c = getTwoPolynomials();
+        if (c == null) return;
+        solver.add(c[0],c[1]);
+    } // done and tested
+
+    private static void subtract(){
+        char[] c = getTwoPolynomials();
+        if (c == null) return;
+        solver.subtract(c[0],c[1]);
+    } // done and tested
+
+    private static void multiply(){
+        char[] c = getTwoPolynomials();
+        if (c == null) return;
+        solver.multiply(c[0],c[1]);
+    } // done and tested
+
+    private static char[] getTwoPolynomials(){
+        System.out.println("For the fist polynomial");
+        Character poly1 = getPolyInput();
+        if (poly1 == null){
+            return null;
+        }
+        System.out.println("For the second polynomial");
+        Character poly2 = getPolyInput();
+        if (poly2 == null){
+            return null;
+        }
+        return new char[] {poly1, poly2};
+    } // done and tested
+
+    private static void evaluatePolynomial() {
+        System.out.print("Enter the value: ");
+        float value = 0;
+        while (!scanner.hasNextFloat()) {
+            System.out.print("Wrong Input, please try again: ");
+            scanner = new Scanner(System.in);
+        }
+        value = scanner.nextFloat();
+        scanner.nextLine();
+        Character poly = getPolyInput();
+        if (poly == null) return;
+        float output = solver.evaluatePolynomial(poly, value);
+        if (output == Float.MAX_VALUE) {
+            System.out.println("Polynomial not found");
+        } else {
+            System.out.println(poly + " at x = " + value + " = " + output);
+        }
+    } // done and tested
+
+    private static void clearPolynomial() {
+        Character poly = getPolyInput();
+        if (poly == null) return;
+        solver.clearPolynomial(poly);
+    } // done and tested
+
+    private static Character getPolyInput() {
+        System.out.print("Insert the variable name: A, B, C or R: ");
+        String poly = scanner.nextLine();
+        while (!"A".equals(poly) && !poly.equals("B") && !poly.equals("C") && !poly.equals("R")) {
+            if (poly.length() == 1) {
+                System.out.println("Polynomial not found");
+                return null;
+            }
+            System.out.print("Wrong Input, please try again: ");
+            poly = scanner.nextLine();
+        }
+
+        return poly.charAt(0);
+    } // done and tested
+
+
+}
