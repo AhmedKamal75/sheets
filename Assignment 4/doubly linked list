@@ -155,7 +155,7 @@ public class DLinkedList implements ILinkedList {
     } // done and tested
 
     @Override
-    public ILinkedList sublist(int fromIndex, int toIndex) throws RuntimeException {
+    public DLinkedList sublist(int fromIndex, int toIndex) throws RuntimeException {
         if ((fromIndex > toIndex) || (fromIndex < 0 || fromIndex >= size) || (toIndex >= size)) {
             throw new RuntimeException("wrong indexes , start = " + fromIndex + " , end = " + toIndex + " , size = " + size);
         }
