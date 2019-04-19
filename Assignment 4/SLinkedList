@@ -1,10 +1,4 @@
-package eg.edu.alexu.csd.datastructure.linkedList;
-
-class h {
-    public static void main(String[] args) {
-
-    }
-}
+package eg.edu.alexu.csd.datastructure.linkedList.cs<03>_cs<08>;
 
 public class SLinkedList {
     Node temp;
