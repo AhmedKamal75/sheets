@@ -1,6 +1,5 @@
-package eg.edu.alexu.csd.datastructure.linkedList;
-
-import java.util.HashSet;
+package eg.edu.alexu.csd.datastructure.linkedList.cs<03>_cs<08>;
+import java.awt.*;
 
 public class PolynomialSolver implements IPolynomialSolver {
     private DLinkedList list = new DLinkedList();
@@ -71,11 +70,19 @@ public class PolynomialSolver implements IPolynomialSolver {
     public float evaluatePolynomial(char poly, float value) {
         Polynomial polynomial = getPolynomial(poly);
         if (polynomial == null) return Float.MAX_VALUE;
-        int[][] arr = polynomial.getTerms();
+        if (polynomial.getTerms().isEmpty()) return 0;
+        DLinkedList list = polynomial.getTerms();
         float sum = 0;
-        for (int i = 0; i < arr.length; i++) {
-            sum += ((float) arr[i][0] * (float) Math.pow((double) value, (double) arr[i][1]));
+        list.setCursor(0);
+        while (true){
+            sum += ((float) ((Point)list.getCurrent()).x * (float) Math.pow((double) value, (double) ((Point)list.getCurrent()).y));
+            if (list.hasNext()) {
+                list.getNext();
+            } else {
+                break;
+            }
         }
+
         return sum;
     } // done and tested
 
@@ -91,50 +98,49 @@ public class PolynomialSolver implements IPolynomialSolver {
             if (temp.name == poly2) {
                 var2 = temp;
             }
-        }
-        if (var1 == null || var2 == null)
+        }        if (var1 == null || var2 == null)
             return null;
 
-        HashSet con = new HashSet();
+        DLinkedList con = new DLinkedList();
         DLinkedList death = new DLinkedList();
         DLinkedList warPower = new DLinkedList();
-        for (int i = 0; i < var1.terms.length; i++) {
+        for (int i = 0; i < var1.listOfTerms.size(); i++) {
             boolean found = false;
             int die = 0;
-            for (int j = 0; j < var1.terms.length; j++) {
-                if (var1.terms[i][1] == var2.terms[j][1]) {
+            for (int j = 0; j < var2.listOfTerms.size(); j++) {
+                if (((Point)var1.listOfTerms.get(i)).y == ((Point)var2.listOfTerms.get(j)).y) {
                     found = true;
                     die = j;
                     break;
                 }
             }
             if (found) {
-                con.add(var1.terms[i][1]);
+                con.add(((Point)var1.listOfTerms.get(i)).y );
                 int fire = 1;
                 if (sign == 2)
                     fire = -1;
-                death.add(var1.terms[i][0] + fire * (var2.terms[die][0]));
+                death.add(((Point)var1.listOfTerms.get(i)).x + fire * (((Point)var2.listOfTerms.get(die)).x ));
                 if ((int) death.get(death.size() - 1) == 0) {
                     death.remove(death.size() - 1);
                 } else {
-                    warPower.add(var1.terms[i][1]);
+                    warPower.add(((Point)var2.listOfTerms.get(i)).y);//var2.[i][1]
                 }
             }
         }
 
-        for (int i = 0; i < var1.terms.length; i++) {
-            if (!con.contains(var1.terms[i][1])) {
-                death.add(var1.terms[i][0]);
-                warPower.add(var1.terms[i][1]);
+        for (int i = 0; i < var1.listOfTerms.size(); i++) {
+            if (!con.contains(((Point)var1.listOfTerms.get(i)).y)) {
+                death.add(((Point)var1.listOfTerms.get(i)).x);
+                warPower.add(((Point)var1.listOfTerms.get(i)).y);
             }
         }
         int fire = 1;
         if (sign == 2)
             fire = -1;
-        for (int j = 0; j < var2.terms.length; j++) {
-            if (!con.contains(var2.terms[j][1])) {
-                death.add(fire * var2.terms[j][0]);
-                warPower.add(var2.terms[j][1]);
+        for (int j = 0; j <var2.listOfTerms.size(); j++) {
+            if (!con.contains(((Point)var2.listOfTerms.get(j)).y)) {
+                death.add(fire * ((Point)var2.listOfTerms.get(j)).x);
+                warPower.add(((Point)var2.listOfTerms.get(j)).y);
             }
         }
         int[][] ans = new int[death.size()][2];
@@ -178,17 +184,14 @@ public class PolynomialSolver implements IPolynomialSolver {
         return ans;
     }
 
-
     @Override
     public int[][] add(char poly1, char poly2) {
-        this.theEndOfWar(poly1, poly2, 1);// 1 for add two for substraction
-
-        return this.theEndOfWar(poly1, poly2, 1);// 1 for add two for substraction
+        return this.theEndOfWar(poly1, poly2, 1);// 1 for add two for subtraction
     }
 
     @Override
     public int[][] subtract(char poly1, char poly2) {
-        return this.theEndOfWar(poly1, poly2, 2);// 1 for add two for substraction
+        return this.theEndOfWar(poly1, poly2, 2);// 1 for add two for subtraction
     }
 
     @Override
@@ -213,10 +216,10 @@ public class PolynomialSolver implements IPolynomialSolver {
         DLinkedList death = new DLinkedList();
         DLinkedList warPower = new DLinkedList();
 
-        for (int i = 0; i < var1.terms.length; i++) {
-            for (int j = 0; j < var2.terms.length; j++) {
-                p1 = var1.terms[i][1] + var2.terms[j][1];
-                c1 = var1.terms[i][0] * var2.terms[j][0];
+        for (int i = 0; i < var1.listOfTerms.size(); i++) {
+            for (int j = 0; j < var2.listOfTerms.size(); j++) {
+                p1 = ((Point)var1.listOfTerms.get(i)).y + ((Point)var2.listOfTerms.get(j)).y;
+                c1 =  ((Point)var1.listOfTerms.get(i)).x * ((Point)var2.listOfTerms.get(j)).x;
                 boolean found = false;
                 for (int k = 0; k < warPower.size(); k++) {
                     if (p1 == (int) warPower.get(k)) {
@@ -270,6 +273,7 @@ public class PolynomialSolver implements IPolynomialSolver {
         }
         setPolynomial('R', ans);
         return ans;
+
     }
 
     @Override
@@ -285,48 +289,67 @@ public class PolynomialSolver implements IPolynomialSolver {
         return s.toString();
     } // done and tested
 
-    public Polynomial getAns() {
-        return ans;
-    }
 
     private class Polynomial {
         private final char name;
-        private int[][] terms;
+        private DLinkedList listOfTerms = new DLinkedList();
 
-        public Polynomial(char name, int[][] terms) {
+        Polynomial(char name, int[][] terms) {
             this.name = name;
-            this.terms = terms;
+            setTerms(terms);
         }
 
-        public char getName() {
+        char getName() {
             return name;
         }
 
-        public int[][] getTerms() {
-            return terms;
+        DLinkedList getTerms() {
+            return listOfTerms;
         }
 
         public void setTerms(int[][] terms) {
-            this.terms = terms;
+            this.listOfTerms.clear();
+            if (terms == null) return;
+            for (int[] term : terms) {
+                this.listOfTerms.add(new Point(term[0], term[1]));
+            }
         }
 
         @Override
         public boolean equals(Object obj) {
             Polynomial polynomial = (Polynomial) obj;
-            if (this.getTerms().length != polynomial.getTerms().length) return false;
-            for (int i = 0; i < polynomial.getTerms().length; i++) {
-                if (this.getTerms()[i].length != polynomial.getTerms()[i].length) return false;
-                for (int j = 0; j < polynomial.getTerms()[i].length; j++) {
-                    if (polynomial.getTerms()[i][j] != this.getTerms()[i][j]) return false;
+            if (this.getTerms().size() != polynomial.getTerms().size()) return false;
+            if (this.listOfTerms.size() != 0){
+                this.listOfTerms.setCursor(0);
+                polynomial.getTerms().setCursor(0);
+                if (!((Point)this.listOfTerms.getCurrent()).equals((Point)polynomial.listOfTerms.getCurrent())){
+                    return false;
                 }
             }
             return this.getName() == polynomial.getName();
         }
 
+        private int[][] linkedListToArray(DLinkedList list){
+            int[][] arr = new int[list.size()][2];
+            list.setCursor(0);
+            int i = 0;
+            if (list.getCurrent() != null) {
+                arr[i][0] = ((Point) list.getCurrent()).x;
+                arr[i++][1] = ((Point) list.getCurrent()).y;
+            }
+            while (list.hasNext()){
+                Point point = ((Point) list.getNext());
+                arr[i][0] = point.x;
+                arr[i++][1] = point.y;
+            }
+            return arr;
+        }
+
         @Override
         public String toString() {
+            int[][] terms = linkedListToArray(this.listOfTerms);
             StringBuilder s = new StringBuilder(this.name + ": ");
-            for (int i = 0; i < this.terms.length; i++) {
+            for (int i = 0; i < terms.length; i++) {
                 if (terms[i][0] != 0) {  // total
                     if (terms[i][1] == 0) { // absolute value
                         if (i == 0) { // first term
