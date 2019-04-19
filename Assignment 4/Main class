@@ -1,6 +1,10 @@
 package eg.edu.alexu.csd.datastructure.linkedList.cs<03>_cs<08>;
 
+import eg.edu.alexu.csd.datastructure.linkedList.PolynomialSolver;
+import java.util.Objects;
 import java.util.Scanner;
+
+
 
 public class Main {
 
@@ -8,6 +12,12 @@ public class Main {
     private static PolynomialSolver solver = new PolynomialSolver();
 
     public static void main(String[] args) {
+//        solver.setPolynomial('A', new int[][]{new int[]{1, 2}, new int[]{-1, 0}});
+//        solver.setPolynomial('B', new int[][]{new int[]{4, 2}, new int[]{-9, 0}});
+//        solver.setPolynomial('C', new int[][]{new int[]{4, 3}, new int[]{-1, 0}});
+//        solver.setPolynomial('X', new int[][]{new int[]{-14, 2}, new int[]{11, 0}});
+//        solver.setPolynomial('N', new int[][]{new int[]{114, -2}, new int[]{-151, 19}});
+
         operate();
     }
 
@@ -50,7 +60,7 @@ public class Main {
                     System.out.println("Wrong Input");
                     continue;
             }
-            System.out.print("====================================================================\n");
+            System.out.print(" ====================================================================\n");
             System.out.println(menu());
         } while (!quit);
         System.out.println("Thanks to using out product");
@@ -79,7 +89,7 @@ public class Main {
         System.out.print("Insert the polynomial terms in the form:\n" +
                 " (coeff1, exponent1), (coeff2, exponent2), .. \n");
         String input = scanner.nextLine();
-        boolean quit = false;
+        boolean quit;
         do {
             int s = input.indexOf(' ');
             if (s != -1) input = charRemoveAt(input, s);
@@ -116,11 +126,7 @@ public class Main {
         Character poly = getPolyInput();
         if (poly == null) return;
         String message = solver.print(poly);
-        if (message == null) {
-            System.out.println("The polynomial " + poly + " isn't found");
-        } else {
-            System.out.println(message);
-        }
+        System.out.println(Objects.requireNonNullElseGet(message, () -> "The polynomial " + poly + " isn't found"));
     }  // done and tested
 
     private static void add(){
@@ -157,7 +163,7 @@ public class Main {
 
     private static void evaluatePolynomial() {
         System.out.print("Enter the value: ");
-        float value = 0;
+        float value;
         while (!scanner.hasNextFloat()) {
             System.out.print("Wrong Input, please try again: ");
             scanner = new Scanner(System.in);
@@ -194,6 +200,5 @@ public class Main {
 
         return poly.charAt(0);
     } // done and tested
-
-
 }
+
