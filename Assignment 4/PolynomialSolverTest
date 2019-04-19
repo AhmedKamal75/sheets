@@ -1,0 +1,80 @@
+package eg.edu.alexu.csd.datastructure.linkedList;
+
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
+
+public class PolynomialSolverTest {
+    private PolynomialSolver solver = new PolynomialSolver();
+
+    @org.junit.Before
+    public void initialize(){
+        solver.setPolynomial('A', new int[][]{new int[]{1, 2}, new int[]{-1, 0}});
+        solver.setPolynomial('B', new int[][]{new int[]{4, 2}, new int[]{-9, 0}});
+        solver.setPolynomial('C', new int[][]{new int[]{4, 3}, new int[]{-1, 0}});
+        solver.setPolynomial('X', new int[][]{new int[]{-14, 2}, new int[]{11, 0}});
+        solver.setPolynomial('N', new int[][]{new int[]{114, -2}, new int[]{-151, 19}});
+    }
+
+    @org.junit.Test
+    public void setPolynomial() {
+        solver.setPolynomial('Y',null);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIndexOutOfBoundsException() {
+        ArrayList emptyList = new ArrayList();
+        Object o = emptyList.get(0);
+    }
+
+    @org.junit.Test
+    public void print() {
+        assertEquals(solver.print('A'),"A: X^2 - 1 ");
+        assertEquals(solver.print('B'),"B: 4X^2 - 9 ");
+        assertEquals(solver.print('C'),"C: 4X^3 - 1 ");
+        assertEquals(solver.print('X'),"X: -14X^2 + 11 ");
+        assertEquals(solver.print('N'),"N: 114X^-2 - 151X^19 ");
+        assertNull(solver.print('H'));
+    }
+
+
+    @org.junit.Test
+    public void clearPolynomial() {
+        solver.clearPolynomial('N');
+        assertNull(solver.print('N'));
+        solver.clearPolynomial('H');
+    }
+
+    @org.junit.Test
+    public void evaluatePolynomial() {
+        assertEquals(solver.evaluatePolynomial('X',(float) 12.0),(float) -2005.0,0.0001f);
+        assertEquals(solver.evaluatePolynomial('C',13.0f),8787.0f,0.00001f);
+        assertEquals(solver.evaluatePolynomial('N',1.0f),-37.0f,0.00001f);
+        assertEquals(solver.evaluatePolynomial('H',0.1f),Float.MAX_VALUE,0.00001f);
+    }
+
+    @org.junit.Test
+    public void add() {
+        solver.add('A','C');
+        assertEquals(solver.print('R'),"R: 4X^3 + X^2 - 2 ");
+    }
+
+    @org.junit.Test
+    public void subtract() {
+        solver.subtract('N','C');
+        assertEquals(solver.print('R'),"R: -151X^19 - 4X^3 + 1 + 114X^-2 ");
+    }
+
+    @org.junit.Test
+    public void multiply() {
+        solver.multiply('C','X');
+        assertEquals(solver.print('R'),"R: -56X^5 + 44X^3 + 14X^2 - 11 ");
+    }
+
+    @org.junit.Test
+    public void toString1() {
+    }
+}
