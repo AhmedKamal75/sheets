@@ -7,7 +7,6 @@ public class DLinkedList implements ILinkedList {
     private int cursorIndex = 0;
     private DNode cursorNode;
 
-
     public DLinkedList() {
         this(null);
     }
@@ -220,7 +219,7 @@ public class DLinkedList implements ILinkedList {
         if (this.isEmpty()) return false;
         if (o == null) return false;
         DNode currentNode = head;
-        while (currentNode != null) {
+        while (currentNode != null && currentNode.getData() != null) {
             if (currentNode.getData().equals(o)) return true;
             currentNode = currentNode.getNext();
         }
@@ -291,3 +290,4 @@ public class DLinkedList implements ILinkedList {
         }
     } // done and tested
 }
+
