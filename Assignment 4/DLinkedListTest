@@ -1,0 +1,113 @@
+package eg.edu.alexu.csd.datastructure.linkedList;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class DLinkedListTest {
+    DLinkedList DLinkedList=new  DLinkedList();
+
+    @org.junit.Before
+    public void initialize(){
+        DLinkedList.add(5);
+        DLinkedList.add(13);
+        DLinkedList.add(0);
+        DLinkedList.add(17);
+        DLinkedList.add(23);
+        DLinkedList.add(-124);
+        DLinkedList.add(1);
+        DLinkedList.add(3,7);
+        DLinkedList.add(6,0);
+
+    }
+
+
+    @Test
+    public void get() {
+        assertEquals(DLinkedList.get(0),5);
+        assertEquals(DLinkedList.get(1),13);
+
+        assertEquals(DLinkedList.get(3),7);
+        assertEquals(DLinkedList.get(4),17);
+        assertEquals(DLinkedList.get(5),23);
+        assertEquals(DLinkedList.get(6),0);
+        assertEquals(DLinkedList.get(7),-124);
+        assertEquals(DLinkedList.get(8),1);
+        boolean thrown = false;
+
+        try {
+            DLinkedList.get(10);
+        } catch ( RuntimeException e) {
+            thrown = true;
+        }
+
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void set() {
+        DLinkedList.set(0,3);
+        DLinkedList.set(7,29);
+        DLinkedList.set(8,1);
+        assertEquals(DLinkedList.get(0),3);
+        assertEquals(DLinkedList.get(7),29);
+        assertEquals(DLinkedList.get(8),1);
+    }
+
+    @Test
+    public void clear() {
+        DLinkedList.clear();
+        assertEquals(DLinkedList.size(),0);
+    }
+
+    @Test
+    public void isEmpty() {
+        DLinkedList.clear();
+        assertTrue(DLinkedList.isEmpty());
+    }
+
+    @Test
+    public void remove() {
+        assertEquals(DLinkedList.size(),9);
+        assertEquals(DLinkedList.get(0),5);
+        DLinkedList.remove(0);
+        assertEquals(DLinkedList.get(0),13);
+        assertEquals(DLinkedList.size(),8);
+    }
+
+    @Test
+    public void size() {
+        assertEquals(DLinkedList.size(),9);
+    }
+
+    @Test
+    public void sublist() {
+        DLinkedList S;
+        S=DLinkedList.Sublist(2,7);
+        assertEquals(S.size(),6);
+        System.out.println(S.toString());
+        System.out.println(DLinkedList.toString());
+        System.out.println(S.get(0));
+        System.out.println(DLinkedList.get(2));
+        // assertTrue(S.get(0).equals( DLinkedList.get(2)));
+        assertEquals(S.get(0),DLinkedList.get(2));
+        assertEquals(S.get(1),DLinkedList.get(3));
+        assertEquals(S.get(2),DLinkedList.get(4));
+        assertEquals(S.get(3),DLinkedList.get(5));
+        assertEquals(S.get(4),DLinkedList.get(6));
+        assertEquals(S.get(5),DLinkedList.get(7));
+
+    }
+
+
+
+    @Test
+    public void contains() {
+        assertTrue(DLinkedList.contains(5));
+        assertTrue(DLinkedList.contains(13));
+        assertTrue(DLinkedList.contains(0));
+        assertTrue(DLinkedList.contains(17));
+        assertTrue(!DLinkedList.contains(18));
+    }
+}
