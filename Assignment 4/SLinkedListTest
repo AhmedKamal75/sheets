@@ -1,0 +1,107 @@
+package eg.edu.alexu.csd.datastructure.linkedList;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class SLinkedListTest {
+    SLinkedList sLinkedList=new SLinkedList();
+
+
+    @org.junit.Before
+    public void initialize(){
+        sLinkedList.add(5);
+        sLinkedList.add(13);
+        sLinkedList.add(0);
+        sLinkedList.add(17);
+        sLinkedList.add(23);
+        sLinkedList.add(-124);
+        sLinkedList.add(1);
+        sLinkedList.add(3,7);
+        sLinkedList.add(6,0);
+
+    }
+    @Test
+    public void get() {
+        assertEquals(sLinkedList.get(0),5);
+        assertEquals(sLinkedList.get(1),13);
+        assertEquals(sLinkedList.get(2),0);
+        assertEquals(sLinkedList.get(3),7);
+        assertEquals(sLinkedList.get(4),17);
+        assertEquals(sLinkedList.get(5),23);
+        assertEquals(sLinkedList.get(6),0);
+        assertEquals(sLinkedList.get(7),-124);
+        assertEquals(sLinkedList.get(8),1);
+        boolean thrown = false;
+
+        try {
+            sLinkedList.get(10);
+        } catch ( RuntimeException e) {
+            thrown = true;
+        }
+
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void set() {
+        sLinkedList.set(0,3);
+        sLinkedList.set(7,29);
+        sLinkedList.set(8,1);
+        assertEquals(sLinkedList.get(0),3);
+        assertEquals(sLinkedList.get(7),29);
+        assertEquals(sLinkedList.get(8),1);
+
+
+    }
+
+    @Test
+    public void clear() {
+        sLinkedList.clear();
+        assertEquals(sLinkedList.size(),0);
+    }
+
+    @Test
+    public void isEmpty() {
+        sLinkedList.clear();
+        assertTrue(sLinkedList.isEmpty());
+    }
+
+    @Test
+    public void remove() {
+        assertEquals(sLinkedList.size(),9);
+        assertEquals(sLinkedList.get(0),5);
+        sLinkedList.remove(0);
+        assertEquals(sLinkedList.get(0),13);
+        assertEquals(sLinkedList.size(),8);
+    }
+
+
+    @Test
+    public void size() {
+        assertEquals(sLinkedList.size(),9);
+    }
+
+    @Test
+    public void sublist() {
+        SLinkedList S;
+        S=sLinkedList.sublist(2,7);
+        assertEquals(S.size(),6);
+        assertEquals(S.get(0),sLinkedList.get(2));
+        assertEquals(S.get(1),sLinkedList.get(3));
+        assertEquals(S.get(2),sLinkedList.get(4));
+        assertEquals(S.get(3),sLinkedList.get(5));
+        assertEquals(S.get(4),sLinkedList.get(6));
+        assertEquals(S.get(5),sLinkedList.get(7));
+
+    }
+
+    @Test
+    public void contains() {
+        assertTrue(sLinkedList.contains(5));
+        assertTrue(sLinkedList.contains(13));
+        assertTrue(sLinkedList.contains(0));
+        assertTrue(sLinkedList.contains(17));
+        assertTrue(!sLinkedList.contains(18));
+    }
+}
