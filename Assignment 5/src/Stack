@@ -1,0 +1,101 @@
+package eg.edu.alexu.csd.datastructure.stack;
+//package eg.edu.alexu.csd.datastructure.stack.<08>;
+
+
+public class Stack implements IStack {
+    private Node head;
+    private int size = 0;
+
+    @Override
+    public Object pop() {
+        if (head == null) return null;
+        Object data = head.getData();
+        head = head.getNext();
+        size--;
+        return data;
+    }
+
+    @Override
+    public Object peek() {
+        if (this.head == null) return null;
+        return head.getData();
+    }
+
+    @Override
+    public void push(Object element) {
+        head = new Node(element,head);
+        size++;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.head == null;
+    }
+
+    @Override
+    public int size() {
+        return this.size;
+    }
+
+    public void clear(){
+        this.head = null;
+        size = 0;
+    }
+
+    public boolean contains(Object obj){
+        Node currentNode = head;
+        while (currentNode != null){
+            if (head.getData().equals(obj)){
+                return true;
+            }
+            currentNode = currentNode.getNext();
+        }
+        return false;
+    }
+
+    private class Node {
+        private Object data;
+        private Node next;
+
+        Node(Object data, Node next) {
+            this.data = data;
+            this.next = next;
+        }
+
+        Object getData() {
+            return data;
+        }
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+
+        Node getNext() {
+            return next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            if (this.data == null) return null;
+            return this.data.toString();
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder("]");
+        Node currentNode = head;
+        while (currentNode != null){
+            s.append(currentNode.getData().toString());
+            currentNode = currentNode.getNext();
+            if (currentNode != null) s.append(',');
+        }
+        s.append('[');
+        s.reverse();
+        return s.toString();
+    }
+}
