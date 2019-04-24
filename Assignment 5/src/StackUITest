@@ -1,0 +1,58 @@
+package eg.edu.alexu.csd.datastructure.stack;
+//package eg.edu.alexu.csd.datastructure.stack.<08>;
+
+
+import java.util.Scanner;
+
+public class StackUITest {
+    private static Stack stack = new Stack();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        operate();
+    }
+
+    private static void operate() {
+        System.out.println(menu());
+        do {
+            System.out.print("Enter a command: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Wrong Input, try again");
+                scanner = new Scanner(System.in);
+                System.out.print("Enter a command: ");
+            }
+            switch (scanner.nextInt()){
+                case 1:
+                    System.out.print("Enter and integer");
+                    if (scanner.hasNextInt()){
+                        stack.push(scanner.nextInt());
+                    }
+                    break;
+                case 2:
+                    if (!stack.isEmpty()){
+                        System.out.println(stack.pop());
+                    }
+                    break;
+                case 3:
+                    if (!stack.isEmpty()){
+                        System.out.println(stack.peek());
+                    }
+                    break;
+                case 4:
+                    System.out.println(stack.size());
+                    break;
+                case 5:
+                    System.out.println(stack.isEmpty());
+            }
+        } while (true);
+    }
+    
+    private static String menu(){
+        return "1: Push \n2: Pop \n3: Peek \n4: Get size\n5: Check if empty\n";
+    }
+}
+
+
+
+
+
