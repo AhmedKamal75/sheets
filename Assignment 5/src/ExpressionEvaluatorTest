@@ -1,0 +1,45 @@
+package eg.edu.alexu.csd.datastructure.stack;
+//package eg.edu.alexu.csd.datastructure.stack.<08>;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class ExpressionEvaluatorTest {
+    private static ExpressionEvaluator evaluator = new ExpressionEvaluator();
+
+    @org.junit.Test
+    public void infixToPostfix() {
+        assertEquals(evaluator.infixToPostfix("2 + 3 * 4"),"2 3 4 * +");
+        assertEquals(evaluator.infixToPostfix("a * b + 5"),"a b * 5 +");
+        assertEquals(evaluator.infixToPostfix("( 1 + 2 ) * 7"),"1 2 + 7 *");
+        assertEquals(evaluator.infixToPostfix("a * b / c"),"a b * c /");
+        assertEquals(evaluator.infixToPostfix("( a / ( b - c + d ) ) * ( e - a ) * c"),"a b c - d + / e a - * c *");
+        assertEquals(evaluator.infixToPostfix("a / b - c + d * e - a * c"),"a b / c - d e * a c * - +");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void infixToPostfix_fail(){
+        assertEquals(evaluator.infixToPostfix("a * something + 5"),"a b * 5 +");  // words aren't allowed
+        // there must be spaces between every two consecutive objects in the expression (a, (b no space
+        assertEquals(evaluator.infixToPostfix("(a / (b - c + d ) ) * ( e - a ) * c"),"a b c - d + / e a - * c *");
+    }
+
+    @org.junit.Test
+    public void evaluate() {
+        assertEquals(evaluator.evaluate("2 3 4 * +"),14,0.0001);
+        assertEquals(evaluator.evaluate("1 2 + 7 *"),21,0.0001);
+        assertEquals(evaluator.evaluate("6 2 / 3 - 4 2 * +"),8,0.0001);
+        assertEquals(evaluator.evaluate("19"),19,0.0001);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void evaluate_fail(){
+        // must contain spaces
+        assertEquals(evaluator.evaluate("2 3 4 *+"),14,0.0001);
+        // mustn't contain any none_integer characters
+        assertEquals(evaluator.evaluate("a * b + 5"),14,0.001);
+        // must be exactly a real expression, notice there is - more
+        assertEquals(evaluator.evaluate("6 2 / 3 - 4 2 - * +"),8,0.0001);
+    }
+}
