@@ -2,10 +2,11 @@ package eg.edu.alexu.csd.datastructure.stack;
 //package eg.edu.alexu.csd.datastructure.stack.<08>;
 
 
+import java.util.EmptyStackException;
 
 public class ExpressionEvaluator implements IExpressionEvaluator {
     @Override
-    public String infixToPostfix(String expression) {
+    public String infixToPostfix(String expression) throws RuntimeException {
         if (validate(expression)){
             DLinkedList list = infixToLinkedListPostfix(expression);
             StringBuilder s = new StringBuilder("");
@@ -18,37 +19,48 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
             }
             return s.toString();
         }
-        return "expression is wrong";
+        throw new RuntimeException("Invalid expression");
     }
 
     private DLinkedList infixToLinkedListPostfix(String expression) {
         DLinkedList list = new DLinkedList();
         Stack stack = new Stack();
-        for (Character character : expression.toCharArray()) {
-            if ((character <= '9' && character >= '0') || (character <= 'z' && character >= 'a') || (character <= 'Z' && character >= 'A')) {
-                list.add(character);
-            } else if (precedence(character) > 0 || character == ')' || character == '(') {
-                if (!stack.isEmpty()) {
-                    if ((precedence(character) > precedence((Character) stack.peek())) || (stack.contains('('))) {
-                        stack.push(character);
-                    } else if (precedence(character) > 0) {
-                        while (!stack.isEmpty() && (precedence((Character) stack.peek()) >= precedence(character))) {
-                            if (precedence(character) == -1) break;
-                            list.add(stack.pop());
+        for (String string : expression.split(" ")) {
+            if (string.length() == 1) {
+                char character = string.charAt(0);
+                if ((character <= '9' && character >= '0') || (character <= 'z' && character >= 'a') || (character <= 'Z' && character >= 'A')) {
+                    list.add(Character.toString(character));
+                } else if (precedence(character) > 0 || character == ')' || character == '(') {
+                    if (!stack.isEmpty()) {
+                        if ((precedence(character) > precedence((Character) stack.peek())) || (stack.contains('('))) {
+                            stack.push(character);
+                        } else if (precedence(character) > 0) {
+                            while (!stack.isEmpty() && (precedence((Character) stack.peek()) >= precedence(character))) {
+                                if (precedence(character) == -1) break;
+                                list.add(stack.pop().toString());
+                            }
+                            stack.push(character);
+                        } else if (character == '(') {
+                            stack.push(character);
+                        } else if (character == ')') {
+                            while (precedence((Character) stack.peek()) > 0) {
+                                list.add(stack.pop().toString());
+                            }
+                            if (stack.peek().equals('(')) {
+                                stack.pop();
+                            }
                         }
+                    } else {
                         stack.push(character);
-                    } else if (character == '(') {
-                        stack.push(character);
-                    } else if (character == ')') {
-                        while (precedence((Character) stack.peek()) > 0) {
-                            list.add(stack.pop());
-                        }
-                        if (stack.peek().equals('(')) {
-                            stack.pop();
-                        }
                     }
-                } else {
-                    stack.push(character);
+                }
+            } else {
+                int value;
+                try {
+                    value = Integer.parseInt(string);
+                    list.add(Integer.toString(value));
+                } catch (NumberFormatException e){
+                    throw new RuntimeException("can't have " + string+ " in the expression");
                 }
             }
         }
@@ -81,15 +93,27 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         int operators = 0;
         boolean junk = false;
 
-        for (Character character : expression.toCharArray()) {
-            if (character == '(') leftPar++;
-            else if (character == ')') rightPar++;
-            else if ((character <= '9' && character >= '0') || (character <= 'z' && character >= 'a')
-                    || (character <= 'Z' && character >= 'A'))
+        for (String string : expression.split(" ")) {
+            if (string.equals("(")){
+                leftPar++;
+            } else if (string.equals(")")){
+                rightPar++;
+            } else if (string.length() == 1 && ((string.charAt(0) <= 'z' && string.charAt(0) >= 'a'))
+                    || (string.charAt(0) <= 'Z' && string.charAt(0) >= 'A')){
                 operands++;
-            else if (character == '+' || character == '-' || character == '/' || character == '*') operators++;
-            else if (character != ' ') junk = true;
 
+            } else if (string.equals("+") || string.equals("-") || string.equals("/") || string.equals("*")) {
+                operators++;
+            } else if (string.equals(" ")){
+                continue;
+            } else {
+                try{
+                    Integer.parseInt(string);
+                    operands++;
+                } catch (NumberFormatException e){
+                    junk =true;
+                }
+            }
         }
         if (leftPar == rightPar
                 && operands == operators + 1
@@ -98,22 +122,25 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
     }
 
     @Override
-    public int evaluate(String expression) {
-        String[] exp = expression.split(" ");
+    public int evaluate(String expression) {  // sorry but i had to put some constrains, the expression should
+        String[] exp = expression.split(" ");           // have spaces between everything in it
         Stack stack = new Stack();
-        double evaluation = 0;
         for (String string : exp) {
             try {
                 stack.push(Double.parseDouble(string));
             } catch (NumberFormatException e) {
-                double value = result(string, (Double) stack.pop(), (Double) stack.pop());
-                if (value == Double.MAX_VALUE) {
-                    return Integer.MAX_VALUE; // problem found
+                try{
+                    double value = result(string, (Double) stack.pop(), (Double) stack.pop());
+                    if (value == Double.MAX_VALUE) {
+                        throw new RuntimeException("can't evaluate the expression"); // problem found
+                    }
+                    stack.push(value);
+                } catch (EmptyStackException i){
+                    throw new RuntimeException("can't evaluate the expression");
                 }
-                stack.push(value);
             }
         }
-        if (stack.size() > 1) return Integer.MAX_VALUE; // problem found
+        if (stack.size() > 1) throw new RuntimeException("can't evaluate the expression"); // problem found
         return (int) Math.round((Double) stack.pop());
     }
 
