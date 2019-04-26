@@ -2,13 +2,17 @@ package eg.edu.alexu.csd.datastructure.stack;
 //package eg.edu.alexu.csd.datastructure.stack.<08>;
 
 
+import java.util.EmptyStackException;
+
 public class Stack implements IStack {
     private Node head;
     private int size = 0;
 
     @Override
-    public Object pop() {
-        if (head == null) return null;
+    public Object pop() throws EmptyStackException {
+        if (head == null) {
+            throw new EmptyStackException();
+        }
         Object data = head.getData();
         head = head.getNext();
         size--;
@@ -16,13 +20,15 @@ public class Stack implements IStack {
     }
 
     @Override
-    public Object peek() {
-        if (this.head == null) return null;
+    public Object peek() throws EmptyStackException {
+        if (this.head == null) {
+            throw new EmptyStackException();
+        }
         return head.getData();
     }
 
     @Override
-    public void push(Object element) {
+    public void push (Object element) {
         head = new Node(element,head);
         size++;
     }
