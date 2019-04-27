@@ -1,0 +1,110 @@
+package eg.edu.alexu.csd.datastructure.queue;
+
+/**
+ * this is Queue ADT backed with a single linked list
+ */
+public class LQueue implements ILinkedBased {
+    /**
+     *this is the node where we can extract from the queue
+     */
+    private Node front;
+    /**
+     * this is the node where i can dequeue
+     */
+    private Node rear = front;
+    /**
+     * keeps track of the size
+     */
+    private int size;
+
+    public LQueue() {
+        this.size = 0;
+    }
+
+    /**
+     * it adds new item to the end of the queue
+     * @param item the item to be enqueued
+     */
+
+    @Override
+    public void enqueue(Object item) {
+        if (isEmpty()){
+            rear = new Node(item,null);
+            front = rear;
+        } else {
+            Node node = new Node(item,null);
+            rear.setPrevious(node);
+            rear = node;
+        }
+        size++;
+    }
+
+    /**
+     * get the first item in the queue if it isn't empty
+     * @return the first item to enter the queue
+     * @throws RuntimeException if the queue is already empty
+     */
+
+    @Override
+    public Object dequeue() throws RuntimeException{
+        if (isEmpty()) {
+            throw new RuntimeException("Queue is empty");
+        }
+        Object data = front.getData();
+        front = front.getPrevious();
+        size--;
+        return data;
+    }
+
+    /**
+     *
+     * @return true if the queue is empty, false if not
+     */
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
+     * @return the size of the queue
+     */
+    @Override
+    public int size() {
+        return size;
+    }
+
+    /**
+     * a single linked list node
+     */
+    private class Node{
+        private Object data;
+        private Node previous;
+
+        public Node(Object data, Node previous) {
+            this.data = data;
+            this.previous = previous;
+        }
+
+        public Object getData() {
+            return data;
+        }
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+
+        public Node getPrevious() {
+            return previous;
+        }
+
+        public void setPrevious(Node previous) {
+            this.previous = previous;
+        }
+
+        @Override
+        public String toString() {
+            return data.toString();
+        }
+    }
+}
