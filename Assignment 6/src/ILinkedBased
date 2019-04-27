@@ -1,0 +1,9 @@
+package eg.edu.alexu.csd.datastructure.queue;
+//package eg.edu.alexu.csd.datastructure.queue.cs<08>_cs<03>_cs<41>;
+
+/**
+ * this is what the LQueue is implementing
+ */
+public interface ILinkedBased extends IQueue{
+
+}
