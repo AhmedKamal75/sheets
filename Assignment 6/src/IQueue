@@ -1,4 +1,5 @@
 package eg.edu.alexu.csd.datastructure.queue;
+//package eg.edu.alexu.csd.datastructure.queue.cs<08>_cs<03>_cs<41>;
 
 public interface IQueue {
     /**
@@ -18,3 +19,4 @@ public interface IQueue {
     public int size();
 
 }
+
