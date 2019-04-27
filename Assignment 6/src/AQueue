@@ -1,1 +1,84 @@
+package eg.edu.alexu.csd.datastructure.queue;
+//package eg.edu.alexu.csd.datastructure.queue.cs<08>_cs<03>_cs<41>;
 
+/**
+ * this is Queue ADT backed with an Array
+ */
+public class AQueue implements IArrayBased {
+    /**
+     * this is the used in case of the user didn't enter value in the constructor
+     */
+    private static final int INITIAL_CAPACITY = 100;
+    /**
+     * this is the back Array of the queue
+     */
+    private Object[] backArray;
+    private int front;
+    private int rear;
+
+    public AQueue(){
+        this(INITIAL_CAPACITY);
+    }
+
+    public AQueue(int initialCapacity){
+        if (initialCapacity < 1)  {
+            throw new RuntimeException();
+        }
+        backArray = new Object[initialCapacity];
+        front = 0;
+        rear = 0;
+    }
+
+    /**
+     * Inserts an item at the queue front.
+     * @param item extend Object class
+     * @throws RuntimeException if the queue is already full
+     */
+
+    @Override
+    public void enqueue(Object item) throws RuntimeException{
+        if (rear == front){
+            if ( backArray[rear] != null) { // full queue
+                throw new RuntimeException("can't insert another object in the queue");
+            }
+        }
+        backArray[rear] = item;
+        rear = (rear + 1) % backArray.length;
+    }
+
+    /**
+     * Removes the object at the queue rear and returns it.
+     * @return the object on the from in the queue( the first object to enter the queue).
+     * @throws RuntimeException if the queue is already empty.
+     */
+
+    @Override
+    public Object dequeue() throws RuntimeException{
+        if (isEmpty()){
+            throw new RuntimeException("queue is empty");
+        }
+        Object item = backArray[front];
+        backArray[front] = null;
+        front = (front + 1) % backArray.length;
+        return item;
+    }
+
+    /**
+     * Tests if this queue is empty.
+     * @return true if the queue is empty
+     */
+
+    @Override
+    public boolean isEmpty() {
+        return (front == rear) && (backArray[0] == null);
+    }
+
+    /**
+     *Returns the number of elements in the queue
+     */
+
+    @Override
+    public int size() {
+        return (backArray.length - front + rear) % backArray.length;
+    }
+}
