@@ -4,7 +4,19 @@ package eg.edu.alexu.csd.datastructure.stack;
 
 import java.util.EmptyStackException;
 
+/**
+ * ExpressionEvaluator is a class used to deal with postfix notation
+ */
+
 public class ExpressionEvaluator implements IExpressionEvaluator {
+    /**
+     * it is used to turn and infix expression to postfix expression
+     * @param expression is an infix expression, all operators, operands and parentheses
+     *                   are separate by spaces
+     * infix expression
+     * @return postfix expression separated by spaces
+     * @throws RuntimeException if found anything unusual in the infix expression
+     */
     @Override
     public String infixToPostfix(String expression) throws RuntimeException {
         if (validate(expression)){
@@ -22,6 +34,12 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         throw new RuntimeException("Invalid expression");
     }
 
+    /**
+     * converts and infix string expression to a double linked list
+     * @param expression is an infix expression, all operators, operands and parentheses
+     *      *                   are separate by spaces
+     * @return double linked list of a postfix expression
+     */
     private DLinkedList infixToLinkedListPostfix(String expression) {
         DLinkedList list = new DLinkedList();
         Stack stack = new Stack();
@@ -70,6 +88,11 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         return list;
     }
 
+    /**
+     * gets the precedence of operators
+     * @param c character type represents operators
+     * @return the integer value of precedence
+     */
     private int precedence(char c) {
         switch (c) {
             case '+':
@@ -86,6 +109,12 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         }
     }
 
+    /**
+     * validates an infix expression
+     * @param expression is an infix expression, all operators, operands and parentheses
+     *                 are separate by spaces
+     * @return if valid returns true, else returns false
+     */
     private boolean validate(String expression) {
         int leftPar = 0;
         int rightPar = 0;
@@ -121,6 +150,12 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         return false;
     }
 
+    /**
+     * calculates the value of the expression
+     * @param expression a postfix expression separated by single space
+     *  postfix expression
+     * @return the value of the expression rounded
+     */
     @Override
     public int evaluate(String expression) {  // sorry but i had to put some constrains, the expression should
         String[] exp = expression.split(" ");           // have spaces between everything in it
@@ -144,6 +179,13 @@ public class ExpressionEvaluator implements IExpressionEvaluator {
         return (int) Math.round((Double) stack.pop());
     }
 
+    /**
+     * this one is self-explanatory
+     * @param operator
+     * @param secondOperand
+     * @param firstOperand
+     * @return value of expression
+     */
     private double result(String operator, double secondOperand, double firstOperand) {
         switch (operator) {
             case "+":
