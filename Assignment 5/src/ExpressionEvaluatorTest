@@ -5,8 +5,19 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * it test different cased of inputs and outputs to show how the ExpressionEvaluator class works
+ */
 public class ExpressionEvaluatorTest {
+    /**
+     * this is just a private field evaluator of the ExpressionEvaluator class to be used in the tests
+     */
     private static ExpressionEvaluator evaluator = new ExpressionEvaluator();
+
+    /**
+     * now this method contains the expressions in which the evaluator succeed in converting them into
+     * postfix
+     */
 
     @org.junit.Test
     public void infixToPostfix() {
@@ -18,12 +29,21 @@ public class ExpressionEvaluatorTest {
         assertEquals(evaluator.infixToPostfix("a / b - c + d * e - a * c"),"a b / c - d e * a c * - +");
     }
 
+    /**
+     * here the evaluator fails to convert infix to post fix as the input isn't valid
+     */
+
     @Test(expected = RuntimeException.class)
     public void infixToPostfix_fail(){
         assertEquals(evaluator.infixToPostfix("a * something + 5"),"a b * 5 +");  // words aren't allowed
         // there must be spaces between every two consecutive objects in the expression (a, (b no space
         assertEquals(evaluator.infixToPostfix("(a / (b - c + d ) ) * ( e - a ) * c"),"a b c - d + / e a - * c *");
     }
+
+    /**
+     * this method contains the conditions in which the evaluator succeed in evaluating the postfix
+     * expression
+     */
 
     @org.junit.Test
     public void evaluate() {
@@ -32,6 +52,10 @@ public class ExpressionEvaluatorTest {
         assertEquals(evaluator.evaluate("6 2 / 3 - 4 2 * +"),8,0.0001);
         assertEquals(evaluator.evaluate("19"),19,0.0001);
     }
+
+    /**
+     * here the evaluation of the post fix expression fails for different reasons
+     */
 
     @Test(expected = RuntimeException.class)
     public void evaluate_fail(){
