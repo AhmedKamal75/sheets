@@ -4,13 +4,22 @@ package eg.edu.alexu.csd.datastructure.stack;
 
 import java.util.Scanner;
 
+/**
+ *  this class exists only to provide and user interface to test the Stack class
+ */
+
 public class StackUITest {
+
     private static Stack stack = new Stack();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         operate();
     }
+
+    /**
+     * this method runs and user interface
+     */
 
     private static void operate() {
         System.out.println(menu());
@@ -46,7 +55,7 @@ public class StackUITest {
             }
         } while (true);
     }
-    
+
     private static String menu(){
         return "1: Push \n2: Pop \n3: Peek \n4: Get size\n5: Check if empty\n";
     }
