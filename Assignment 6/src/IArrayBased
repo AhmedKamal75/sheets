@@ -1,0 +1,9 @@
+package eg.edu.alexu.csd.datastructure.queue;
+//package eg.edu.alexu.csd.datastructure.queue.cs<08>_cs<03>_cs<41>;
+
+
+/**
+ * this is what the AQueue is implementing
+ */
+public interface IArrayBased extends IQueue {
+}
