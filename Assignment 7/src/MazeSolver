@@ -1,0 +1,45 @@
+package eg.edu.alexu.csd.datastructure.maze;
+// eg.edu.alexu.csd.datastructure.maze.cs<03>cs<41>_cs<08>
+
+import java.io.*;
+
+public class MazeSolver implements IMazeSolver {
+
+    @Override
+    public int[][] solveBFS(File maze) {
+        char[][] reader = reader(new File("C:\\Users\\d\\Desktop\\java tutorial\\Maze Solver\\src\\maze_file"));
+        return new int[0][];
+    }
+
+    @Override
+    public int[][] solveDFS(File maze) {
+        char[][] reader = reader(new File("C:\\Users\\d\\Desktop\\java tutorial\\Maze Solver\\src\\maze_file"));
+        return new int[0][];
+    }
+
+    private static char[][] reader(File maze){
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(maze));
+            String[] line = reader.readLine().split(" ");
+            char[][] array = new char[Integer.parseInt(line[0])][Integer.parseInt(line[1])];
+            int j = 0;
+            boolean eof = false;
+
+            while (!eof && j < array.length){
+                try {
+                    String inputLine = reader.readLine();
+                    for (int i = 0; i < inputLine.length() ; i++) {
+                        array[j][i] = inputLine.charAt(i);
+                    }
+                    j++;
+                } catch (EOFException e){
+                    eof = true;
+                }
+            }
+            return array;
+        } catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    } // done and tested
+}
