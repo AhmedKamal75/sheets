@@ -1,0 +1,192 @@
+package eg.edu.alexu.csd.datastructure.maze;
+// eg.edu.alexu.csd.datastructure.maze.cs<03>cs<41>_cs<08>
+
+import java.util.EmptyStackException;
+
+/**
+ * Stack is an ADT of type stack that implements IStack interface, and it would be better if
+ * it used generics instead of this trash
+ */
+public class Stack implements IStack {
+    /**
+     * this is the head of the stack i.e. the top element
+     */
+    private Node head;
+    /**
+     * a counter to keep track of the size
+     */
+    private int size = 0;
+
+    /**
+     *  Removes the element at the top of stack and returns that element.
+     *  @return top of stack element
+     * @throws EmptyStackException if empty
+     */
+    @Override
+    public Object pop() throws EmptyStackException {
+        if (head == null) {
+            throw new EmptyStackException();
+        }
+        Object data = head.getData();
+        head = head.getNext();
+        size--;
+        return data;
+    }
+
+    /**
+     * Get the element at the top of stack without removing it from stack.
+     * @return top of stack element
+     * @throws EmptyStackException if empty
+     */
+
+    @Override
+    public Object peek() throws EmptyStackException {
+        if (this.head == null) {
+            throw new EmptyStackException();
+        }
+        return head.getData();
+    }
+
+    /**
+     * Pushes an item onto the top of this stack.
+     * @param element
+     * to insert
+     */
+
+    @Override
+    public void push (Object element) {
+        head = new Node(element,head);
+        size++;
+    }
+
+    /**
+     * Tests if this stack is empty
+     * @return true if stack empty
+     */
+
+    @Override
+    public boolean isEmpty() {
+        return this.head == null;
+    }
+
+    /**
+     *  Returns the number of elements in the stack.
+     *  @return number of elements in the stack
+     */
+
+    @Override
+    public int size() {
+        return this.size;
+    }
+
+    /**
+     * it clears the stack
+     */
+    public void clear(){
+        this.head = null;
+        size = 0;
+    }
+
+    /**
+     * check if the stack contains some object obj
+     * @param obj to check for existance
+     * @return true if obj exists or false if it doesn't
+     */
+
+    public boolean contains(Object obj){
+        Node currentNode = head;
+        while (currentNode != null){
+            if (head.getData().equals(obj)){
+                return true;
+            }
+            currentNode = currentNode.getNext();
+        }
+        return false;
+    }
+
+    /**
+     * this is technically a single linked list node
+     */
+    private class Node {
+        /**
+         * a object field to hold the value stored in the node
+         */
+        private Object data;
+        /**
+         * a reference to type Node to the next node
+         */
+        private Node next;
+
+        /**
+         * a constructor to the node
+         * @param data the data to be stored in the node
+         * @param next reference to the next node
+         */
+
+        Node(Object data, Node next) {
+            this.data = data;
+            this.next = next;
+        }
+
+        /**
+         * @return data field that stores the data of the node
+         */
+
+        Object getData() {
+            return data;
+        }
+
+        /**
+         * @param data sets the value of the data stored in the node
+         */
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+
+        /**
+         * @return returns the reference to the next node
+         */
+
+        Node getNext() {
+            return next;
+        }
+
+        /**
+         * @param next is the reference to the next node
+         *             it sets it
+         */
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        /**
+         * @return the value of the data stored in the node as a string
+         */
+
+        @Override
+        public String toString() {
+            if (this.data == null) return null;
+            return this.data.toString();
+        }
+    }
+
+    /**
+     * represents the stack a string of all the values in it in order
+     * @return the string representation of the stack
+     */
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder("]");
+        Node currentNode = head;
+        while (currentNode != null){
+            s.append(currentNode.getData().toString());
+            currentNode = currentNode.getNext();
+            if (currentNode != null) s.append(',');
+        }
+        s.append('[');
+        s.reverse();
+        return s.toString();
+    }
+}
